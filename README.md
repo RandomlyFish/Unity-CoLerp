@@ -1,5 +1,5 @@
 # Unity-CoLerp
-___
+
 ## About
 CoLerp is C# Class for Unity that is used to continuously interpolate between values. It's intended to be used to animate objects through code, however due it's simplicity it can be used for anything that needs to be interpolated. 
 
