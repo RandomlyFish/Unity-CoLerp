@@ -23,16 +23,19 @@ ___
 ### Properties
 
 **defaultCurve : AnimationCurve**
+
 Returns default AnimationCurve used for interpolation, unless one is provided in the To method
 ___
 
 **paused : bool** (Read Only)
+
 Returns true if the interpolation is paused
 ___
 
 ### Constructor
 
 **CoLerp**
+
 Creates a new CoLerp with an initial value
 
 &nbsp;&nbsp;&nbsp;&nbsp;**_value : float** 
@@ -42,6 +45,7 @@ ___
 ### Public Methods
 
 **To** : void
+
 Sets the value to interpolate towards
 
 &nbsp;&nbsp;&nbsp;&nbsp;**_value : float**
@@ -56,10 +60,12 @@ Sets the value to interpolate towards
 ___
 
 **Get : float**
+
 Returns the current value
 ___
 
 **Set** : void
+
 Override the current value and remove interpolations
 
 &nbsp;&nbsp;&nbsp;&nbsp;**_value : float**
@@ -67,9 +73,11 @@ Override the current value and remove interpolations
 ___
 
 **Pause** : void
+
 Pauses the interpolation
 ___
 
 **Resume** : void
+
 Resumes the interpolation
 ___________________________________________________________________________
