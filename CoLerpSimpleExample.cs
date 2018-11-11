@@ -10,7 +10,7 @@ public class CoLerpSimpleExample : MonoBehaviour {
     const float moveDistance = 3f;
     const float center = 0f;
 
-    private void Start () {
+    void Start () {
         coLerp = new CoLerp(center); // Creates an instance of the CoLerp class with center as the initial value
     }
 
