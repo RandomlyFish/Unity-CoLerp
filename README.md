@@ -26,4 +26,4 @@ You can download the [CoLerp.unitypackage](https://github.com/RandomlyFish/Unity
 
 ## License
 
-This project is licensed under the GPLv3 license - see the [LICENSE.md](https://github.com/RandomlyFish/Unity-CoLerp/raw/master/license.md) file for details
+This project is licensed under the GPLv3 license - see the [LICENSE](https://github.com/RandomlyFish/Unity-CoLerp/blob/master/LICENSE) file for details
