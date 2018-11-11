@@ -39,6 +39,7 @@ ___
 Creates a new CoLerp with an initial value
 
 &nbsp;&nbsp;&nbsp;&nbsp;**_value : float** 
+
 &nbsp;&nbsp;&nbsp;&nbsp;The initial value for the CoLerp, if the CoLerp is used to move an object, this value should match the object's current position
 ___
 
@@ -49,13 +50,17 @@ ___
 Sets the value to interpolate towards
 
 &nbsp;&nbsp;&nbsp;&nbsp;**_value : float**
+
 &nbsp;&nbsp;&nbsp;&nbsp;The value to interpolate towards
 
 &nbsp;&nbsp;&nbsp;&nbsp;**_time : float**
+
 &nbsp;&nbsp;&nbsp;&nbsp;The time in seconds it will take for the value to change from it's current value to the provided value
 
 &nbsp;&nbsp;&nbsp;&nbsp;**_curve : AnimationCurve** (Optional)
+
 &nbsp;&nbsp;&nbsp;&nbsp;The AnimationCurve used to change the way it interplates from it's current value to the provided value
+
 &nbsp;&nbsp;&nbsp;&nbsp;If one isn't provided, then defaultCurve will be used instead
 ___
 
@@ -69,6 +74,7 @@ ___
 Override the current value and remove interpolations
 
 &nbsp;&nbsp;&nbsp;&nbsp;**_value : float**
+
 &nbsp;&nbsp;&nbsp;&nbsp;The value to override the current value with
 ___
 
