@@ -11,12 +11,12 @@ Here's a video demonstrating it being used for both movement and rotation:
 
 [![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/yHLHBVNWAQ8/0.jpg)](https://www.youtube.com/watch?v=yHLHBVNWAQ8)
 
-___
+
 ## Installation
 
 You can download the CoLerp.unitypackage file and import it into your Unity project. It contains CoLerp.cs and the example scenes shown in the video.
 
-___
+
 ## Documentation
 
 [Link to the pdf](https://github.com/RandomlyFish/Unity-CoLerp/blob/master/Documentation.pdf)
