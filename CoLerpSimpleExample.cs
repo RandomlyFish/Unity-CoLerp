@@ -2,12 +2,9 @@
 
 public class CoLerpSimpleExample : MonoBehaviour {
     
-    [Tooltip("The time it takes for the cube to move to the target position")]
-    public float time = 0.5f;
-    [Tooltip("The interpolation curve used to change the way the cube moves between positions")]
+    public float time = 0.5f; // The time it takes for the cube to move to the target position
     public AnimationCurve curve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f); // Creates a native AnimationCurve with ease in and out
-    [Tooltip("Object that is being moved by the script")]
-    public Transform objectMoving;
+    public Transform objectMoving; // Object that is being moved by the script
 
     private CoLerp coLerp;
     const float moveDistance = 3f;
