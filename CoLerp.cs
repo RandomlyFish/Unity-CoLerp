@@ -1,7 +1,24 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CoLerp {
+
+    // Public Properties
+
+    /// <summary>
+    /// Returns the current value to interpolate towards
+    /// </summary>
+    public float targetValue { get; private set; }
+
+    /// <summary>
+    /// Returns true if it's currently interpolating, even if it's paused
+    /// </summary>
+    public bool interpolating { get; private set; }
+
+    /// <summary>
+    /// Returns true if the interpolation is paused
+    /// </summary>
+    public bool paused { get; private set; }
 
     /// <summary>
     /// The default AnimationCurve used for interpolation, unless one is provided in the To method
@@ -16,20 +33,16 @@ public class CoLerp {
         }
     }
 
-    /// <summary>
-    /// Returns true if the interpolation is paused
-    /// </summary>
-    public bool paused { get; private set; }
-
     private AnimationCurve DefaultCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
+    // Private Properties
+
     private float value;
-
     private float timePaused;
-
     private List<Lerp> lerps = new List<Lerp>();
     
     private class Lerp {
+
         public float from;
         public float to;
         public float toOffset;
@@ -39,6 +52,8 @@ public class CoLerp {
         public AnimationCurve curve;
     }
 
+    // Constructor
+
     /// <summary>
     /// Creates a new CoLerp with an initial value
     /// </summary>
@@ -46,16 +61,26 @@ public class CoLerp {
     public CoLerp (float _value) {
 
         value = _value;
+        targetValue = _value;
         paused = false;
+        interpolating = false;
     }
 
+    // Public Methods
+
+    // Base To method
     /// <summary>
     /// Sets the value to interpolate towards
     /// </summary>
     /// <param name="_value">The value to interpolate towards</param>
     /// <param name="_time">The time in seconds it will take for the value to change from it's current value to the provided value</param>
+    /// <param name="_delay">The time in seconds it will take for the interpolation to start</param>
     /// <param name="_curve">The AnimationCurve used to change the way it interpolates from it's current value to the provided value</param>
-	public void To (float _value, float _time, AnimationCurve _curve) {
+	public void To (float _value, float _time, float _delay, AnimationCurve _curve) {
+
+        if (targetValue == _value) {
+            return;
+        }
 
         Lerp lerp = new Lerp();
 
@@ -63,25 +88,51 @@ public class CoLerp {
         lerp.to = _value;
         lerp.toOffset = 0;
         lerp.previous = value;
-        lerp.startTime = Time.time;
+        lerp.startTime = Time.time + _delay;
         lerp.duration = _time;
         lerp.curve = ClampCurve(_curve);
 
         // Add an offset to account for ongoing interpolations
         foreach (Lerp currentLerp in lerps) {
-            lerp.toOffset -= currentLerp.to + currentLerp.toOffset - currentLerp.previous; 
+            lerp.toOffset -= currentLerp.to + currentLerp.toOffset - currentLerp.previous;
         }
 
         lerps.Add(lerp);
+
+        targetValue = _value;
+        interpolating = true;
     }
 
+    // To without delay
     /// <summary>
-    /// Sets the value to interpolate towards using defaultCurve as the AnimationCurve
+    /// Sets the value to interpolate towards
+    /// </summary>
+    /// <param name="_value">The value to interpolate towards</param>
+    /// <param name="_time">The time it will take for the value to change from it's current value to the provided value</param>
+    /// <param name = "_curve" > The AnimationCurve used to change the way it interpolates from it's current value to the provided value</param>
+    public void To (float _value, float _time, AnimationCurve _curve) {
+        To(_value, _time, 0f, _curve);
+    }
+
+    // To without AnimationCurve
+    /// <summary>
+    /// Sets the value to interpolate towards
+    /// </summary>
+    /// <param name="_value">The value to interpolate towards</param>
+    /// <param name="_time">The time it will take for the value to change from it's current value to the provided value</param>
+    /// <param name="_delay">The time in seconds it will take for the interpolation to start</param>
+    public void To (float _value, float _time, float _delay) {
+        To(_value, _time, _delay, defaultCurve);
+    }
+
+    // To without delay and AnimationCurve
+    /// <summary>
+    /// Sets the value to interpolate towards
     /// </summary>
     /// <param name="_value">The value to interpolate towards</param>
     /// <param name="_time">The time it will take for the value to change from it's current value to the provided value</param>
     public void To (float _value, float _time) {
-        To(_value, _time, defaultCurve);
+        To(_value, _time, 0f, defaultCurve);
     }
 
     /// <summary>
@@ -95,16 +146,21 @@ public class CoLerp {
 
         for (int i = 0; i < lerps.Count; i += 1) {
 
-            float currentFromLerp = CalculateCurrentFromLerp(lerps[i]);
+            float currentFromLerp = CalculateValueFromLerp(lerps[i], Time.time);
 
             value += currentFromLerp - lerps[i].previous; // Value is changed based on the difference between the previus and current value
             lerps[i].previous = currentFromLerp;
 
             // If the interpolation have reached the end, remove it
             if (Time.time >= lerps[i].startTime + lerps[i].duration) {
+                
+                if (lerps.Count == 1) {
 
-                if (lerps.Count == 1 && Mathf.Approximately(value, lerps[0].to) == true) {
-                    value = lerps[0].to;
+                    if (Mathf.Approximately(value, lerps[0].to) == true) {
+                        value = lerps[0].to;
+                    }
+
+                    interpolating = false;
                 }
 
                 lerps.RemoveAt(i);
@@ -123,6 +179,7 @@ public class CoLerp {
 
         value = _value;
         lerps = new List<Lerp>();
+        interpolating = false;
     }
 
     /// <summary>
@@ -161,12 +218,17 @@ public class CoLerp {
         paused = false;
     }
 
-    /// <summary>
-    /// Get the current value of the provided Lerp
-    /// </summary>
-    private float CalculateCurrentFromLerp (Lerp _lerp) {
+    // Private Methods
 
-        float progress = Mathf.Min(1f, (Time.time - _lerp.startTime) / _lerp.duration);
+    /// <summary>
+    /// Returns the value from the Lerp given the time
+    /// </summary>
+    /// <param name="_lerp">The Lerp</param>
+    /// <param name="_time">The time in seconds to base the calculation off</param>
+    /// <returns>The value from the Lerp given the time</returns>
+    private float CalculateValueFromLerp (Lerp _lerp, float _time) {
+
+        float progress = Mathf.Min(1f, (_time - _lerp.startTime) / _lerp.duration);
         return Mathf.LerpUnclamped(_lerp.from, _lerp.to + _lerp.toOffset, _lerp.curve.Evaluate(progress));
     }
 
