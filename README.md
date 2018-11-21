@@ -14,7 +14,7 @@ Here's a video demonstrating it being used for both movement and rotation:
 
 ## Installation
 
-You can download the [CoLerp.unitypackage](https://github.com/RandomlyFish/Unity-CoLerp/raw/master/CoLerp.unitypackage) file and import it into your Unity project. It contains CoLerp.cs and the example scenes shown in the video.
+You can find CoLerp on the [Asset Store](https://assetstore.unity.com/packages/tools/animation/colerp-132979), or alternatively download the [CoLerp.unitypackage](https://github.com/RandomlyFish/Unity-CoLerp/raw/master/CoLerp.unitypackage) file and import it into your Unity project. It contains CoLerp.cs and the example scenes shown in the video.
 
 
 ## Documentation
